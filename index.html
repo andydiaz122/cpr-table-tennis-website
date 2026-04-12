@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://fsccjjzutaxfonecmjxc.supabase.co wss://fsccjjzutaxfonecmjxc.supabase.co; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https:;">
+  <title>APOLLO V9.0 — Systematic Edge in Undermodeled Markets</title>
+  <meta name="description" content="APOLLO V9.0: Systematic quantitative trading system deploying $20K on Czech Liga Pro table tennis. Live results.">
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="APOLLO V9.0 — Systematic Edge in Undermodeled Markets">
+  <meta property="og:description" content="Systematic quantitative trading system deploying $20K of external capital on Czech Liga Pro table tennis. Live P&amp;L updated in real-time.">
+  <meta property="og:image" content="og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="APOLLO V9.0 — Systematic Edge in Undermodeled Markets">
+  <meta name="twitter:description" content="$20K deployed. Live results. Systematic edge in niche markets.">
+
+  <!-- Preload critical fonts -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.css">
+
+  <!-- TradingView Lightweight Charts -->
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+
+  <!-- Supabase JS Client (no defer — must load before our scripts) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12/dist/ScrollTrigger.min.js" defer></script>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ═══ Nav ═══════════════════════════════════════════════ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">APOLLO <span>V9.0</span></a>
+      <ul class="nav-links">
+        <li><a href="#thesis">Thesis</a></li>
+        <li><a href="#live">Live Results</a></li>
+        <li><a href="#engine">Engine</a></li>
+        <li><a href="#validation">Validation</a></li>
+        <li><a href="https://github.com/andydiaz122" target="_blank" rel="noopener">GitHub</a></li>
+      </ul>
+      <button id="auth-button" class="auth-btn" title="Operator login" aria-label="Login"></button>
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══ S1: Hero ══════════════════════════════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="container hero-content">
+      <span class="section-label">Quantitative Research</span>
+      <h1>Systematic Edge in Undermodeled Markets</h1>
+      <p class="hero-subtitle">
+        <span>APOLLO V9.0</span> &mdash; Deploying $20K on Czech Liga Pro Table Tennis
+      </p>
+
+      <div class="pill-row">
+        <div class="stat-pill"><strong>+2.09%</strong>&nbsp; ROI <span class="pill-label">Backtest OOS</span></div>
+        <div class="stat-pill"><strong>1.21</strong>&nbsp; Sharpe <span class="pill-label">Backtest OOS</span></div>
+        <div class="stat-pill"><strong>3,332</strong>&nbsp; Bets Validated</div>
+      </div>
+
+      <a href="#live" class="cta-link">See Live Results &darr;</a>
+    </div>
+  </section>
+
+  <!-- ═══ S1.5: Thesis ═══════════════════════════════════════ -->
+  <section id="thesis">
+    <div class="container">
+      <span class="section-label">Investment Thesis</span>
+      <h2>Why Czech Liga Pro?</h2>
+
+      <div class="thesis-grid reveal">
+        <div class="thesis-card">
+          <div class="thesis-num">01</div>
+          <h3>Structural Inefficiency</h3>
+          <p>Czech Liga Pro is a high-frequency table tennis league operating 12+ hours daily with
+            minimal bookmaker attention. Market-makers rely on generic algorithms, creating
+            persistent mispricings in player-specific fatigue dynamics that sophisticated models
+            can exploit.</p>
+        </div>
+        <div class="thesis-card">
+          <div class="thesis-num">02</div>
+          <h3>Unpriced Signal</h3>
+          <p>Physical fatigue is the dominant unpriced factor in continuous table tennis leagues.
+            Players competing in 6+ matches per day exhibit measurable performance degradation
+            that bookmaker odds fail to incorporate. Our residual model captures this systematic
+            error.</p>
+        </div>
+        <div class="thesis-card">
+          <div class="thesis-num">03</div>
+          <h3>Defensible Moat</h3>
+          <p>Replication requires 113K+ match historical dataset, proprietary feature engineering
+            pipeline, domain-specific Elo tracking, and real-time state management infrastructure.
+            The data collection alone represents 18+ months of continuous ingestion from a
+            specialized API vendor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ S2: Live Performance ═════════════════════════════ -->
+  <section id="live">
+    <div class="container">
+      <span class="section-label">Live Tracking Period</span>
+      <h2>Real-Time Trading Results</h2>
+
+      <!-- AI Ticker -->
+      <div class="ai-ticker reveal">
+        <div class="ai-ticker-text" id="ai-ticker-text"></div>
+        <span class="ai-ticker-cursor" id="ai-ticker-cursor"></span>
+      </div>
+
+      <!-- Stat Cards -->
+      <div class="stat-grid reveal">
+        <div class="stat-card">
+          <div class="stat-label">Win Rate</div>
+          <div class="stat-value stat-value--win num">51.8%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Max Drawdown</div>
+          <div class="stat-value num">$3,295.14 <span style="font-size:0.75rem;color:var(--text-muted)">(14.45%)</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cumulative PnL</div>
+          <div class="stat-value stat-value--win num">+$1,201.26</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Bets</div>
+          <div class="stat-value stat-value--cyan num" id="total-bets">314</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Edge</div>
+          <div class="stat-value num">&mdash;</div>
+        </div>
+      </div>
+
+      <!-- Equity Curve -->
+      <div class="chart-container reveal">
+        <div class="chart-header">
+          <span class="chart-title">Equity Curve</span>
+          <span class="chart-value stat-value--win" id="chart-pnl">+$1,201.26</span>
+        </div>
+        <div class="chart-body">
+          <div id="equity-chart"></div>
+          <div id="chart-events" class="chart-events"></div>
+        </div>
+      </div>
+
+      <!-- Orderbook Trade Tape -->
+      <div class="orderbook-container reveal">
+        <div class="orderbook-header">
+          <span class="orderbook-title">Trade Tape</span>
+          <span style="font-size:0.625rem;color:var(--text-muted)" id="trade-count">0 trades</span>
+        </div>
+        <div class="orderbook-scroll" id="orderbook-scroll">
+          <table class="orderbook">
+            <thead>
+              <tr>
+                <th style="text-align:left">Time</th>
+                <th style="text-align:left">Asset</th>
+                <th style="text-align:left">Signal</th>
+                <th>Odds</th>
+                <th class="col-edge-h">Edge%</th>
+                <th class="col-stake-h">Stake</th>
+                <th>PnL</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody id="orderbook-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer reveal">
+        <p>
+          <strong>Note:</strong> This is a live tracking period with real capital.
+          Statistical significance requires N&ge;300 bets; results below that threshold
+          should be interpreted as directional, not conclusive.
+          All metrics update in real-time as bets are placed and resolved.
+          Bets marked <strong>CASHOUT</strong> reflect early position exits with actual P&amp;L
+          (payout minus wager), not model-driven resolutions.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ S3: The Engine ════════════════════════════════════ -->
+  <section id="engine">
+    <div class="container">
+      <span class="section-label">Model Architecture</span>
+      <h2>The Engine</h2>
+
+      <!-- 3-Step Pipeline -->
+      <div class="pipeline-grid reveal">
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">01</div>
+          <h3>CatBoost Ensemble</h3>
+          <p>Gradient-boosted decision trees trained on 69K+ historical matches. Residual architecture predicts bookmaker error, not raw outcome.</p>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">02</div>
+          <h3>Isotonic Calibration</h3>
+          <p>5-fold cross-validated probability calibration. Maps model scores to true event frequencies. Brier CV: 0.1496.</p>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-num">03</div>
+          <h3>Kelly Sizing</h3>
+          <p>Fractional Kelly criterion with Brier-scaled dynamic brake. Auto-deleverages when model calibration drifts beyond tolerance.</p>
+        </div>
+      </div>
+
+      <!-- Metrics Table -->
+      <table class="metrics-table reveal">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>ROI / Bet</td><td>2.37%</td></tr>
+          <tr><td>Sharpe Ratio</td><td>3.09</td></tr>
+          <tr><td>Max Drawdown (Raw)</td><td>21.69%</td></tr>
+          <tr><td>Max Drawdown (Managed)</td><td>5.89%</td></tr>
+          <tr><td>Brier CV Score</td><td>0.1496</td></tr>
+          <tr><td>Feature Families</td><td>5 (8 residual signals)</td></tr>
+          <tr><td>Walk-Forward Decay</td><td>0.184</td></tr>
+          <tr><td>Bootstrap p-value</td><td>0.0044</td></tr>
+        </tbody>
+      </table>
+
+      <!-- Feature Families (generalized — exact features not disclosed) -->
+      <div class="feature-bars reveal">
+        <h3 style="margin-bottom:1.5rem;font-size:0.875rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em">
+          Signal Contribution by Family
+        </h3>
+        <div class="feature-bar">
+          <div class="feature-bar-label">Fatigue &amp; Recovery</div>
+          <div class="feature-bar-track">
+            <div class="feature-bar-fill" style="--pct:33"></div>
+          </div>
+          <span class="feature-bar-value num">~33%</span>
+        </div>
+        <div class="feature-bar">
+          <div class="feature-bar-label">Skill &amp; Rating</div>
+          <div class="feature-bar-track">
+            <div class="feature-bar-fill" style="--pct:23"></div>
+          </div>
+          <span class="feature-bar-value num">~23%</span>
+        </div>
+        <div class="feature-bar">
+          <div class="feature-bar-label">Market Pricing</div>
+          <div class="feature-bar-track">
+            <div class="feature-bar-fill" style="--pct:15"></div>
+          </div>
+          <span class="feature-bar-value num">~15%</span>
+        </div>
+        <div class="feature-bar">
+          <div class="feature-bar-label">Form &amp; Momentum</div>
+          <div class="feature-bar-track">
+            <div class="feature-bar-fill" style="--pct:14"></div>
+          </div>
+          <span class="feature-bar-value num">~14%</span>
+        </div>
+        <div class="feature-bar">
+          <div class="feature-bar-label">Contextual</div>
+          <div class="feature-bar-track">
+            <div class="feature-bar-fill" style="--pct:15"></div>
+          </div>
+          <span class="feature-bar-value num">~15%</span>
+        </div>
+      </div>
+
+      <div class="disclaimer reveal" style="margin-top:1rem">
+        <p>
+          Signal contributions are approximate and represent grouped feature families.
+          Individual feature names and computation methods are proprietary.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ S3.5: Validation ══════════════════════════════════ -->
+  <section id="validation">
+    <div class="container">
+      <span class="section-label">Statistical Validation</span>
+      <h2>Rigorous Out-of-Sample Testing</h2>
+
+      <p class="section-intro reveal">
+        Every claim is backed by institutional-grade validation. We use techniques from
+        Marcos L&oacute;pez de Prado&rsquo;s <em>Advances in Financial Machine Learning</em>
+        to prevent overfitting and ensure genuine predictive power.
+      </p>
+
+      <div class="validation-grid reveal">
+        <div class="validation-card">
+          <h3>CPCV</h3>
+          <p class="validation-detail">Combinatorially Purged Cross-Validation</p>
+          <p>Eliminates information leakage between train/test folds by purging overlapping
+            temporal data. Standard k-fold is invalid for time-series betting data &mdash;
+            CPCV is the gold standard.</p>
+        </div>
+        <div class="validation-card">
+          <h3>Walk-Forward</h3>
+          <p class="validation-detail">Decay Metric: 0.184</p>
+          <p>Sequential out-of-sample testing that mimics real deployment. Low decay metric
+            confirms the model maintains predictive power as it encounters new data, not
+            just data similar to training.</p>
+        </div>
+        <div class="validation-card">
+          <h3>Bootstrap</h3>
+          <p class="validation-detail">p-value: 0.0044</p>
+          <p>10,000 bootstrap iterations confirm statistical significance at p &lt; 0.01.
+            The probability of achieving these results by chance is less than 0.5%.</p>
+        </div>
+      </div>
+
+      <!-- OOS Results Table -->
+      <h3 class="oos-heading reveal">Clean Out-of-Sample Backtest</h3>
+      <table class="metrics-table reveal">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Total Bets (OOS)</td><td class="num">3,332</td></tr>
+          <tr><td>Win Rate</td><td class="num">56.0%</td></tr>
+          <tr><td>ROI per Bet</td><td class="num">+2.09%</td></tr>
+          <tr><td>Sharpe Ratio</td><td class="num">1.21</td></tr>
+          <tr><td>Max Drawdown</td><td class="num">18.20%</td></tr>
+          <tr><td>Model Brier Score</td><td class="num">0.2297</td></tr>
+          <tr><td>Bookmaker Brier Score</td><td class="num">0.2316</td></tr>
+          <tr><td>Break-Even Slippage</td><td class="num">3.28&cent;</td></tr>
+        </tbody>
+      </table>
+
+      <div class="disclaimer reveal" style="margin-top:1rem">
+        <p>
+          Backtest results use sequential out-of-sample evaluation with no look-ahead bias.
+          Model Brier &lt; Bookmaker Brier confirms the model is better calibrated than the market.
+          Break-even slippage of 3.28&cent; provides meaningful execution margin.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ S4: Infrastructure ════════════════════════════════ -->
+  <section id="infrastructure">
+    <div class="container">
+      <span class="section-label">Execution Infrastructure</span>
+      <h2>Defense in Depth</h2>
+
+      <div class="infra-grid reveal">
+        <div class="infra-card">
+          <h3>JIT Execution Firewall</h3>
+          <p>Matches evaluated at T-30min with finalized player state. Eliminates phantom rest artifacts from early API polling.</p>
+        </div>
+        <div class="infra-card">
+          <h3>Event Sourcing</h3>
+          <p>Bankroll reconstructed deterministically from first principles: $20,000 + SUM(PnL) - SUM(sweeps). Immune to state corruption.</p>
+        </div>
+        <div class="infra-card">
+          <h3>Capital Sweep</h3>
+          <p>Profits above the high-water mark swept to reserve ledger, resetting operating bankroll. Locks in realized gains.</p>
+        </div>
+        <div class="infra-card">
+          <h3>Forecast Ledger</h3>
+          <p>Matches >30min out logged to market_projections for research. Re-evaluated with fresh state when entering JIT window.</p>
+        </div>
+      </div>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer reveal" style="margin-top:2rem">
+        <p>
+          <strong>Disclaimer:</strong> Past performance does not guarantee future results.
+          All trading and wagering involves risk of loss. This system deploys real capital
+          and results shown reflect actual positions taken. Not investment advice.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ S5: Footer ════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <ul class="footer-links">
+        <li><a href="mailto:andydiaz122@gmail.com">Email</a></li>
+        <li><a href="https://github.com/andydiaz122" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/andydiaz122" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+      <div class="footer-badges">
+        <span class="tech-badge">CatBoost</span>
+        <span class="tech-badge">Python</span>
+        <span class="tech-badge">PostgreSQL</span>
+        <span class="tech-badge">Supabase</span>
+      </div>
+      <span class="footer-meta">APOLLO V9.0 &mdash; Czech Liga Pro &mdash; 2026</span>
+    </div>
+  </footer>
+
+  <!-- ═══ Auth Modal ════════════════════════════════════════ -->
+  <div id="auth-modal" class="modal-overlay">
+    <div class="modal">
+      <h3>Operator Login</h3>
+      <form id="auth-form">
+        <input type="email" name="email" placeholder="Email" required autocomplete="email">
+        <input type="password" name="password" placeholder="Password" required autocomplete="current-password">
+        <div id="auth-error" class="form-message form-message--error" style="display:none"></div>
+        <button type="submit" class="btn-primary">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══ Bet Entry Form (operator-only) ═══════════════════ -->
+  <section id="bet-entry" class="operator-only" style="display:none">
+    <div class="container">
+      <span class="section-label">Operator Console</span>
+      <h2>Record Bet</h2>
+
+      <form id="bet-entry-form" class="bet-form">
+        <div class="bet-form-grid">
+          <!-- Left: Match Details -->
+          <div class="bet-form-col">
+            <label>Match Date/Time
+              <input type="datetime-local" name="match-date" required>
+            </label>
+            <label>Player 1 (Home/P1)
+              <input type="text" name="p1-name" list="player-names" required placeholder="e.g. Milan Smrcek">
+            </label>
+            <label>Player 2 (Away/P2)
+              <input type="text" name="p2-name" list="player-names" required placeholder="e.g. Petr Picek">
+            </label>
+            <div class="radio-group">
+              <span class="radio-label">Pick Side</span>
+              <label class="radio"><input type="radio" name="side" value="P1" checked> P1</label>
+              <label class="radio"><input type="radio" name="side" value="P2"> P2</label>
+            </div>
+            <label>Pick Name
+              <input type="text" name="pick-name" readonly tabindex="-1">
+            </label>
+            <label>Odds
+              <input type="number" name="odds" step="0.001" min="1.001" required placeholder="2.250">
+            </label>
+          </div>
+
+          <!-- Right: Model Signals -->
+          <div class="bet-form-col">
+            <label>Model Probability
+              <input type="number" name="model-prob" step="0.001" min="0.01" max="0.99" required placeholder="0.516">
+            </label>
+            <label>Edge (auto)
+              <input type="text" name="edge" readonly tabindex="-1" class="computed">
+            </label>
+            <label>Kelly Scaled (auto)
+              <input type="text" name="kelly-scaled" readonly tabindex="-1" class="computed">
+            </label>
+            <label>Brier Scale Factor
+              <input type="number" name="brier-scale" step="0.01" min="0.25" max="1.0" value="1.0">
+            </label>
+            <label>Stake ($)
+              <input type="number" name="stake" step="0.01" min="0.01" required placeholder="0.00">
+            </label>
+            <label>Notes (optional)
+              <textarea name="notes" rows="2" placeholder="Optional operator notes..."></textarea>
+            </label>
+          </div>
+        </div>
+
+        <div id="bet-form-message" class="form-message" style="display:none"></div>
+        <button type="submit" class="btn-primary">Record Bet</button>
+      </form>
+
+      <datalist id="player-names"></datalist>
+    </div>
+  </section>
+
+  <!-- ═══ Resolve Modal ════════════════════════════════════ -->
+  <div id="resolve-modal" class="modal-overlay">
+    <div class="modal">
+      <h3>Resolve Bet</h3>
+      <p id="resolve-detail" class="resolve-detail"></p>
+      <div class="resolve-actions">
+        <button id="resolve-win" class="btn-win">WIN</button>
+        <button id="resolve-loss" class="btn-loss">LOSS</button>
+        <button id="resolve-cashout" class="btn-cashout">CASHOUT</button>
+        <button id="resolve-void" class="btn-void">VOID</button>
+        <button id="resolve-cancel" class="btn-cancel">Cancel</button>
+      </div>
+      <div class="cashout-pnl-row" style="margin-top:0.75rem">
+        <label style="font-size:0.6875rem;color:var(--text-muted)">Cash-out P&amp;L (Payout - Wager):
+          <input type="number" id="cashout-pnl" step="0.01" placeholder="-4.00" style="width:120px;margin-left:0.5rem">
+        </label>
+      </div>
+      <div id="resolve-error" class="form-message form-message--error"></div>
+    </div>
+  </div>
+
+  <!-- ═══ Scripts ═══════════════════════════════════════════ -->
+  <script src="js/supabase-client.js"></script>
+  <script src="js/metrics.js"></script>
+  <script src="js/orderbook.js"></script>
+  <script src="js/tv-chart.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/bet-entry.js"></script>
+  <script src="js/bet-resolution.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
