@@ -1,4 +1,7 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-13T07:00:00Z,"Mecl, Jan",,"Mecl, Jan",P2,1.588,39.85,23.44,WIN,BO-954543700-1
+2026-04-13T07:00:00Z,"Mecl, Jan",,"Mecl, Jan",P2,1.625,362.5,226.56,WIN,BO-954542913-1
+2026-04-13T07:00:00Z,"Mecl, Jan",,"Mecl, Jan",P2,1.69,362.5,250.0,WIN,BO-954542831-1
 2026-04-12T07:30:00Z,"Sobisek, Martin",,"Sobisek, Martin",P2,3.35,140.0,-140.0,LOSS,BO-954288894-1
 2026-04-11T18:00:00Z,"Janata, Tomas",,"Janata, Tomas",P2,1.926,108.0,-108.0,LOSS,BO-954055716-1
 2026-04-05T16:00:00Z,"Tuma, Daniel",,"Tuma, Daniel",P1,1.82,244.0,200.0,WIN,BO-952442649-1

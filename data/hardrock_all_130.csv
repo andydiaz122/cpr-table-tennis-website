@@ -1,4 +1,8 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-13T07:00:00Z,Mecl Jr Jan,Ruzicka Jiri,Ruzicka Jiri,P2,9.0,25.0,-25.0,LOSS,7454830134353330480
+2026-04-13T07:00:00Z,Mecl Jr Jan,Ruzicka Jiri,Ruzicka Jiri,P2,12.0,25.0,-25.0,LOSS,2847829959605616918
+2026-04-13T07:00:00Z,Mecl Jr Jan,Ruzicka Jiri,Ruzicka Jiri,P2,11.0,50.0,-50.0,LOSS,8933783224874828055
+2026-04-13T07:00:00Z,Mecl Jr Jan,Ruzicka Jiri,Mecl Jr Jan,P1,1.526,350.0,184.21,WIN,
 2026-04-12T12:00:00Z,Regner Michal,Urbaniec Radim,Urbaniec Radim,P2,3.75,25.0,-25.0,LOSS,2068183342112702739
 2026-04-12T12:00:00Z,Regner Michal,Urbaniec Radim,Urbaniec Radim,P2,1.417,400.0,-400.0,LOSS,2068183342112702740
 2026-04-03T19:21:00Z,Vlastimil Kolar,Robin Pacha,Vlastimil Kolar,P1,1.83,400.0,333.33,WIN,2528344618257482033
