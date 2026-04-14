@@ -1,4 +1,7 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-14T00:00:00Z,Polasek Radovan,Wawrosz Pavel,Polasek Radovan,P1,3.0,160.0,320.0,WIN,6193273900751782166
+2026-04-14T00:00:00Z,Polasek Radovan,Wawrosz Pavel,Polasek Radovan,P1,3.0,160.0,320.0,WIN,3911322454575939863
+2026-04-14T00:00:00Z,Cetner Milan,Vladimir Svoboda,Cetner Milan,P1,1.556,80.0,-80.0,LOSS,957534423467819286
 2026-04-13T07:00:00Z,Mecl Jr Jan,Ruzicka Jiri,Ruzicka Jiri,P2,9.0,25.0,-25.0,LOSS,7454830134353330480
 2026-04-13T07:00:00Z,Mecl Jr Jan,Ruzicka Jiri,Ruzicka Jiri,P2,12.0,25.0,-25.0,LOSS,2847829959605616918
 2026-04-13T07:00:00Z,Mecl Jr Jan,Ruzicka Jiri,Ruzicka Jiri,P2,11.0,50.0,-50.0,LOSS,8933783224874828055

@@ -1,4 +1,9 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-14T07:00:00Z,"Petrek, Tomas",,"Petrek, Tomas",P2,1.926,235.0,-235.0,LOSS,BO-954718239-1
+2026-04-14T02:00:00Z,"Batog, Tomek",,"Batog, Tomek",P2,1.592,150.0,88.76,WIN,BO-954669130-1
+2026-04-14T02:00:00Z,"Cetner, Milan",,"Cetner, Milan",P2,1.254,375.0,95.42,WIN,BO-954668858-1
+2026-04-14T01:30:00Z,"Svacha, Ondrej",,"Svacha, Ondrej",P2,1.82,50.0,-50.0,LOSS,BO-954664255-1
+2026-04-14T00:00:00Z,"Mikuska, Alexander",,"Mikuska, Alexander",P2,1.297,25.0,7.42,WIN,BO-954651589-1
 2026-04-13T07:00:00Z,"Mecl, Jan",,"Mecl, Jan",P2,1.588,39.85,23.44,WIN,BO-954543700-1
 2026-04-13T07:00:00Z,"Mecl, Jan",,"Mecl, Jan",P2,1.625,362.5,226.56,WIN,BO-954542913-1
 2026-04-13T07:00:00Z,"Mecl, Jan",,"Mecl, Jan",P2,1.69,362.5,250.0,WIN,BO-954542831-1
