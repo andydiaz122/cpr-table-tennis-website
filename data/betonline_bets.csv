@@ -1,4 +1,13 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-15T16:00:00Z,"Neuwirth Sr, Yaroslav",,"Neuwirth Sr, Yaroslav",P2,1.488,25.0,-25.0,LOSS,BO-954971188-1
+2026-04-15T15:30:00Z,"Vavrecka, Michal",,"Vavrecka, Michal",P2,2.05,90.0,94.5,WIN,BO-954964137-1
+2026-04-15T15:00:00Z,"Kanera, Jan",,"Kanera, Jan",P2,2.13,250.0,282.5,WIN,BO-954960885-1
+2026-04-15T15:00:00Z,"Kanera, Jan",,"Kanera, Jan",P2,2.24,250.0,310.0,WIN,BO-954960589-1
+2026-04-15T14:30:00Z,"Urbaniec, Radim",,"Urbaniec, Radim",P1,2.6,250.0,-250.0,LOSS,BO-954959939-1
+2026-04-15T14:30:00Z,"Svechota, Vojtech",,"Svechota, Vojtech",P2,1.526,475.0,250.0,WIN,BO-954957911-1
+2026-04-15T14:30:00Z,"Svechota, Vojtech",,"Svechota, Vojtech",P2,1.562,445.0,250.0,WIN,BO-954957723-1
+2026-04-15T14:30:00Z,"Plachy, Jiri",,"Plachy, Jiri",P2,1.581,200.0,116.28,WIN,BO-954957596-1
+2026-04-15T11:30:00Z,"Klement, Milan",,"Klement, Milan",P1,1.87,175.0,-175.0,LOSS,BO-954938650-1
 2026-04-15T11:00:00Z,"Parhomenko, Dmitro",,"Parhomenko, Dmitro",P2,2.89,50.0,94.5,WIN,BO-954938107-1
 2026-04-15T11:00:00Z,"Parhomenko, Dmitro",,"Parhomenko, Dmitro",P2,3.01,50.0,100.5,WIN,BO-954937401-1
 2026-04-15T11:00:00Z,"Smetka, Pavel",,"Smetka, Pavel",P2,2.43,250.0,357.5,WIN,BO-954937115-1
