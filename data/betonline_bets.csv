@@ -1,4 +1,11 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-15T11:00:00Z,"Parhomenko, Dmitro",,"Parhomenko, Dmitro",P2,2.89,50.0,94.5,WIN,BO-954938107-1
+2026-04-15T11:00:00Z,"Parhomenko, Dmitro",,"Parhomenko, Dmitro",P2,3.01,50.0,100.5,WIN,BO-954937401-1
+2026-04-15T11:00:00Z,"Smetka, Pavel",,"Smetka, Pavel",P2,2.43,250.0,357.5,WIN,BO-954937115-1
+2026-04-15T11:00:00Z,"Smetka, Pavel",,"Smetka, Pavel",P2,2.53,250.0,382.5,WIN,BO-954936929-1
+2026-04-15T11:00:00Z,"Smetka, Pavel",,"Smetka, Pavel",P2,2.53,90.0,137.7,WIN,BO-954936816-1
+2026-04-15T11:00:00Z,"Smetka, Pavel",,"Smetka, Pavel",P2,2.6,160.0,256.0,WIN,BO-954936563-1
+2026-04-15T11:00:00Z,"Parhomenko, Dmitro",,"Parhomenko, Dmitro",P2,3.01,60.0,120.6,WIN,BO-954936451-1
 2026-04-14T23:30:00Z,"Hradecky, Jakub",,"Hradecky, Jakub",P2,1.87,230.0,-230.0,LOSS,BO-954833815-1
 2026-04-14T23:30:00Z,"Tuma, Daniel",,"Tuma, Daniel",P1,2.05,250.0,262.5,WIN,BO-954833288-1
 2026-04-14T23:30:00Z,"Tuma, Daniel",,"Tuma, Daniel",P1,2.27,250.0,317.5,WIN,BO-954832103-1

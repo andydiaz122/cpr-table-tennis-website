@@ -1,4 +1,6 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-15T11:00:00Z,Walek Adrian,Skacelik Richard,Walek Adrian,P1,1.87,450.0,391.3,WIN,6701034945785233712
+2026-04-15T11:00:00Z,Walek Adrian,Skacelik Richard,Skacelik Richard,P2,2.0,50.0,-50.0,LOSS,6963774762975887635
 2026-04-14T20:30:00Z,Svacha Ondrej,Kasnik Sebastian,Svacha Ondrej,P1,1.741,270.0,200.0,WIN,7452730025805218096
 2026-04-14T20:00:00Z,Paril Ondrej,Velebil Lukas,Paril Ondrej,P1,1.588,100.0,-100.0,LOSS,4242887247931769136
 2026-04-14T20:00:00Z,Barton Ales,Jezek Michal,Barton Ales,P1,1.385,350.0,-350.0,LOSS,5602739608992481584
