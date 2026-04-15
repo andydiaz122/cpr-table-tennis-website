@@ -1,4 +1,20 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-14T23:30:00Z,"Hradecky, Jakub",,"Hradecky, Jakub",P2,1.87,230.0,-230.0,LOSS,BO-954833815-1
+2026-04-14T23:30:00Z,"Tuma, Daniel",,"Tuma, Daniel",P1,2.05,250.0,262.5,WIN,BO-954833288-1
+2026-04-14T23:30:00Z,"Tuma, Daniel",,"Tuma, Daniel",P1,2.27,250.0,317.5,WIN,BO-954832103-1
+2026-04-14T23:00:00Z,"Kadavy, Simon",,"Kadavy, Simon",P2,1.535,330.0,-330.0,LOSS,BO-954827085-1
+2026-04-14T22:00:00Z,"Prokupek, Jaroslav",,"Prokupek, Jaroslav",P1,2.39,250.0,347.5,WIN,BO-954813922-1
+2026-04-14T22:00:00Z,"Prokupek, Jaroslav",,"Prokupek, Jaroslav",P1,2.53,250.0,382.5,WIN,BO-954813683-1
+2026-04-14T20:30:00Z,"Kasnik, Sebastian",,"Kasnik, Sebastian",P1,2.67,250.0,-250.0,LOSS,BO-954802597-1
+2026-04-14T20:30:00Z,"Urbaniec, Radim",,"Urbaniec, Radim",P2,1.535,467.5,250.0,WIN,BO-954801189-1
+2026-04-14T19:00:00Z,"Kanak, Alois",,"Kanak, Alois",P2,1.667,50.0,33.33,WIN,BO-954787480-1
+2026-04-14T19:00:00Z,"Kanak, Alois",,"Kanak, Alois",P2,1.714,29.16,20.83,WIN,BO-954786916-1
+2026-04-14T19:00:00Z,"Kanak, Alois",,"Kanak, Alois",P2,1.833,275.0,229.17,WIN,BO-954785937-1
+2026-04-14T19:00:00Z,"Nohejl, Vaclav 1975",,"Nohejl, Vaclav 1975",P2,1.735,150.0,-150.0,LOSS,BO-954785752-1
+2026-04-14T19:00:00Z,"Kanak, Alois",,"Kanak, Alois",P2,1.909,275.0,250.0,WIN,BO-954785620-1
+2026-04-14T19:00:00Z,"Parhomenko, Dmitro",,"Parhomenko, Dmitro",P2,1.82,200.0,163.93,WIN,BO-954785409-1
+2026-04-14T16:00:00Z,"Stach, Jiri",,"Stach, Jiri",P1,1.714,25.0,17.86,WIN,BO-954759727-1
+2026-04-14T16:00:00Z,"Stach, Jiri",,"Stach, Jiri",P1,1.714,25.0,17.86,WIN,BO-954758291-1
 2026-04-14T07:00:00Z,"Petrek, Tomas",,"Petrek, Tomas",P2,1.926,235.0,-235.0,LOSS,BO-954718239-1
 2026-04-14T02:00:00Z,"Batog, Tomek",,"Batog, Tomek",P2,1.592,150.0,88.76,WIN,BO-954669130-1
 2026-04-14T02:00:00Z,"Cetner, Milan",,"Cetner, Milan",P2,1.254,375.0,95.42,WIN,BO-954668858-1

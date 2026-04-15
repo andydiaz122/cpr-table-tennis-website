@@ -1,4 +1,9 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-14T20:30:00Z,Svacha Ondrej,Kasnik Sebastian,Svacha Ondrej,P1,1.741,270.0,200.0,WIN,7452730025805218096
+2026-04-14T20:00:00Z,Paril Ondrej,Velebil Lukas,Paril Ondrej,P1,1.588,100.0,-100.0,LOSS,4242887247931769136
+2026-04-14T20:00:00Z,Barton Ales,Jezek Michal,Barton Ales,P1,1.385,350.0,-350.0,LOSS,5602739608992481584
+2026-04-14T19:00:00Z,Kanak Alois,Navrat Tomas,Kanak Alois,P1,1.833,100.0,83.33,WIN,4196240029036708144
+2026-04-14T19:00:00Z,Kanak Alois,Navrat Tomas,Kanak Alois,P1,1.833,100.0,83.33,WIN,1060291922972770582
 2026-04-14T00:00:00Z,Polasek Radovan,Wawrosz Pavel,Polasek Radovan,P1,3.0,160.0,320.0,WIN,6193273900751782166
 2026-04-14T00:00:00Z,Polasek Radovan,Wawrosz Pavel,Polasek Radovan,P1,3.0,160.0,320.0,WIN,3911322454575939863
 2026-04-14T00:00:00Z,Cetner Milan,Vladimir Svoboda,Cetner Milan,P1,1.556,80.0,-80.0,LOSS,957534423467819286
