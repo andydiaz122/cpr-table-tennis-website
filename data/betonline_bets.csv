@@ -1,4 +1,23 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-16T16:30:00Z,"Postelt, Tomas",,"Postelt, Tomas",P1,2.44,250.0,-250.0,LOSS,BO-955187972-1
+2026-04-16T16:00:00Z,"Koubek, Vojtech",,"Koubek, Vojtech",P1,2.27,250.0,-250.0,LOSS,BO-955183579-1
+2026-04-16T15:30:00Z,"Vyvial, Pavel",,"Vyvial, Pavel",P2,1.909,125.0,113.64,WIN,BO-955179983-1
+2026-04-16T15:00:00Z,"Sulava, Lubor",,"Sulava, Lubor",P2,2.36,250.0,-250.0,LOSS,BO-955179000-1
+2026-04-16T15:00:00Z,"Barton, David",,"Barton, David",P1,1.667,225.0,150.0,WIN,BO-955178884-1
+2026-04-16T15:00:00Z,"Vales, Jakub",,"Vales, Jakub",P2,1.952,239.37,-239.37,LOSS,BO-955178568-1
+2026-04-16T15:00:00Z,"Vales, Jakub",,"Vales, Jakub",P2,2.17,232.5,-232.5,LOSS,BO-955178388-1
+2026-04-16T15:00:00Z,"Sulava, Lubor",,"Sulava, Lubor",P2,2.43,250.0,-250.0,LOSS,BO-955176057-1
+2026-04-16T15:00:00Z,"Sulava, Lubor",,"Sulava, Lubor",P2,2.64,250.0,-250.0,LOSS,BO-955175860-1
+2026-04-16T15:00:00Z,"Vales, Jakub",,"Vales, Jakub",P2,1.935,267.5,-267.5,LOSS,BO-955175715-1
+2026-04-16T14:30:00Z,"Koubek, Vojtech",,"Koubek, Vojtech",P2,1.769,130.0,100.0,WIN,BO-955174621-1
+2026-04-16T14:30:00Z,"Postelt, Tomas",,"Postelt, Tomas",P1,2.17,250.0,-250.0,LOSS,BO-955172731-1
+2026-04-16T14:30:00Z,"Postelt, Tomas",,"Postelt, Tomas",P1,2.44,250.0,-250.0,LOSS,BO-955172516-1
+2026-04-16T14:30:00Z,"Zika, Tadeas",,"Zika, Tadeas",P1,2.14,250.0,-250.0,LOSS,BO-955172450-1
+2026-04-16T12:00:00Z,"Srba, Jan",,"Srba, Jan",P1,2.05,250.0,262.5,WIN,BO-955157623-1
+2026-04-16T11:00:00Z,"Barton, Ales",,"Barton, Ales",P2,1.741,337.5,-337.5,LOSS,BO-955154359-1
+2026-04-16T11:00:00Z,"Barton, Ales",,"Barton, Ales",P2,1.8,312.5,-312.5,LOSS,BO-955153953-1
+2026-04-16T11:00:00Z,"Barton, Ales",,"Barton, Ales",P2,1.862,290.0,-290.0,LOSS,BO-955153479-1
+2026-04-16T11:00:00Z,"Polasek, Radovan",,"Polasek, Radovan",P2,2.15,250.0,-250.0,LOSS,BO-955153309-1
 2026-04-15T23:00:00Z,"Smrcek, Milan",,"Smrcek, Milan",P2,1.909,200.0,-200.0,LOSS,BO-955041614-1
 2026-04-15T23:00:00Z,"Smrcek, Milan",,"Smrcek, Milan",P2,1.952,249.38,-249.38,LOSS,BO-955041033-1
 2026-04-15T23:00:00Z,"Hasmanda, Rostislav",,"Hasmanda, Rostislav",P2,1.752,150.0,112.78,WIN,BO-955040882-1
