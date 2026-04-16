@@ -1,6 +1,6 @@
 {
-  "timestamp": "2026-04-15T20:00:00Z",
-  "summary": "[SYS] 390 positions tracked across two sportsbooks (Hard Rock + BetOnline). Cumulative P&L: +$6,290.51 on $66,688.81 wagered (9.43% ROI). Win rate: 54.1% (205W-174L-11C). Max drawdown from peak: $3,295.14 (12.50%). Bankroll: $26,290.51. System status: LIVE.",
+  "timestamp": "2026-04-16T04:00:00Z",
+  "summary": "[SYS] 413 positions tracked across two sportsbooks (Hard Rock + BetOnline). Cumulative P&L: +$6,374.20 on $71,000.19 wagered (8.98% ROI). Win rate: 54.1% (217W-184L-12C). Max drawdown from peak: $3,295.14 (12.17%). Bankroll: $26,374.20. System status: LIVE.",
   "model": "manual-update",
-  "trades_analyzed": 390
+  "trades_analyzed": 413
 }
