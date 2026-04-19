@@ -1,4 +1,27 @@
 date,p1_name,p2_name,pick,side,odds,stake,pnl,result,event_id
+2026-04-19T19:30:00Z,"Sebera, Petr",,"Sebera, Petr",P1,1.568,440.0,250.0,WIN,BO-956264675-1
+2026-04-19T19:30:00Z,"Bartunek, Radek",,"Bartunek, Radek",P1,1.556,50.0,27.78,WIN,BO-956254462-1
+2026-04-19T19:30:00Z,"Bartunek, Radek",,"Bartunek, Radek",P1,1.455,100.0,45.45,WIN,BO-956251621-1
+2026-04-19T19:30:00Z,"Bartunek, Radek",,"Bartunek, Radek",P1,1.455,100.0,45.45,WIN,BO-956251343-1
+2026-04-19T11:30:00Z,"Plachy, Jiri",,"Plachy, Jiri",P2,1.617,150.0,-150.0,LOSS,BO-956144917-1
+2026-04-19T11:00:00Z,"Louda, Jiri",,"Louda, Jiri",P1,3.75,25.0,-25.0,LOSS,BO-956145801-1
+2026-04-19T11:00:00Z,"Priesol, Daniel",,"Priesol, Daniel",P2,1.87,287.5,250.0,WIN,BO-956142005-1
+2026-04-19T11:00:00Z,"Louda, Jiri",,"Louda, Jiri",P2,2.66,250.0,-250.0,LOSS,BO-956141956-1
+2026-04-18T23:00:00Z,"Hejduk, Alexander",,"Hejduk, Alexander",P2,1.833,38.0,31.67,WIN,BO-955957467-1
+2026-04-18T23:00:00Z,"Hejduk, Alexander",,"Hejduk, Alexander",P2,1.833,227.0,189.17,WIN,BO-955955780-1
+2026-04-18T23:00:00Z,"Kolar, Milan",,"Kolar, Milan",P2,2.66,250.0,-250.0,LOSS,BO-955954112-1
+2026-04-18T23:00:00Z,"Hejduk, Alexander",,"Hejduk, Alexander",P2,2.09,250.0,272.5,WIN,BO-955953940-1
+2026-04-18T22:30:00Z,"Havel, Ladislav",,"Havel, Ladislav",P2,1.4,625.0,250.0,WIN,BO-955937078-1
+2026-04-18T19:00:00Z,"Postelt, Vladimir",,"Postelt, Vladimir",P1,4.5,25.0,87.5,WIN,BO-955891084-1
+2026-04-18T19:00:00Z,"Machander, Dalimil",,"Machander, Dalimil",P2,1.606,335.0,203.03,WIN,BO-955861658-1
+2026-04-18T19:00:00Z,"Dedek, Jiri",,"Dedek, Jiri",P2,1.769,325.0,250.0,WIN,BO-955861371-1
+2026-04-18T19:00:00Z,"Machander, Dalimil",,"Machander, Dalimil",P2,1.746,335.0,250.0,WIN,BO-955860554-1
+2026-04-18T19:00:00Z,"Didi, Julius",,"Didi, Julius",P2,2.6,250.0,400.0,WIN,BO-955860165-1
+2026-04-18T18:00:00Z,"Machander, Dalimil",,"Machander, Dalimil",P1,2.95,250.0,-250.0,LOSS,BO-955830646-1
+2026-04-18T11:00:00Z,"Vejvoda, Viktor",,"Vejvoda, Viktor",P2,1.746,280.0,208.96,WIN,BO-955706976-1
+2026-04-18T11:00:00Z,"Guliak, Roman",,"Guliak, Roman",P2,2.04,250.0,-250.0,LOSS,BO-955706778-1
+2026-04-18T10:30:00Z,"Plachy, Jiri",,"Plachy, Jiri",P1,2.24,250.0,-250.0,LOSS,BO-955705427-1
+2026-04-18T10:30:00Z,"Plachy, Jiri",,"Plachy, Jiri",P1,2.32,250.0,-250.0,LOSS,BO-955705098-1
 2026-04-18T00:00:00Z,"Dolezal, Vaclav",,"Dolezal, Vaclav",P2,1.452,50.0,22.62,WIN,BO-955541348-1
 2026-04-17T23:00:00Z,"Vitrovyj, Oleg",,"Vitrovyj, Oleg",P2,2.15,250.0,-250.0,LOSS,BO-955519571-1
 2026-04-17T23:00:00Z,"Bartunek, Radek",,"Bartunek, Radek",P2,2.27,250.0,317.5,WIN,BO-955519300-1
