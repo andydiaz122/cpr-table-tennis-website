@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   Metrics Engine — APOLLO V9.0
+   Metrics Engine — APOLLO V9.3
    Client-side computation of rolling trading metrics.
    Fed by Supabase data, updates stat cards in the DOM.
    ══════════════════════════════════════════════════════════════ */

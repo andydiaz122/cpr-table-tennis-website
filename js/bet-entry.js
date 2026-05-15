@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   Bet Entry Form — APOLLO V9.0
+   Bet Entry Form — APOLLO V9.3
    Trading-terminal style form for recording pre-match bets.
    Auto-calculates edge, Kelly, and stake from model signals.
    ══════════════════════════════════════════════════════════════ */

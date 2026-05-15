@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   Bet Resolution — APOLLO V9.0
+   Bet Resolution — APOLLO V9.3
    Handles resolving pending bets (WIN/LOSS/VOID).
    Only available when operator is authenticated.
    ══════════════════════════════════════════════════════════════ */

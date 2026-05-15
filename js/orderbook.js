@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   Orderbook Trade Tape — APOLLO V9.0
+   Orderbook Trade Tape — APOLLO V9.3
    Renders trades from Supabase (or static JSON fallback).
    Supports real-time updates and pending bet display.
    ══════════════════════════════════════════════════════════════ */

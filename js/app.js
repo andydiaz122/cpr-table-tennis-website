@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   App — APOLLO V9.0
+   App — APOLLO V9.3
    IntersectionObserver reveals, Gemini AI Ticker, smooth scroll,
    and real-time subscription wiring.
    ══════════════════════════════════════════════════════════════ */

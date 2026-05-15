@@ -1,5 +1,5 @@
 -- ══════════════════════════════════════════════════════════════
--- APOLLO V9.0 Website — Supabase Schema
+-- APOLLO V9.3 Website — Supabase Schema
 -- Investor-facing bet ledger with real-time subscriptions
 -- ══════════════════════════════════════════════════════════════
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-APOLLO V9.0 — Bulk Bet Import Script
+APOLLO V9.3 — Bulk Bet Import Script
 =====================================
 Imports historical bets from CSV or JSON into Supabase.
 Supports backdated match_date values for historical backfill.

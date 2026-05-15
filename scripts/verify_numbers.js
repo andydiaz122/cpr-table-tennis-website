@@ -1,5 +1,5 @@
 /**
- * APOLLO V9.0 — Programmatic Number Verification
+ * APOLLO V9.3 — Programmatic Number Verification
  *
  * Loads the live site in Playwright, extracts every displayed number,
  * queries Supabase for the source of truth, and flags mismatches.

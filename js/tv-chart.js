@@ -1,6 +1,6 @@
 /* ══════════════════════════════════════════════════════════════
    TradingView Lightweight Charts — Equity Curve
-   APOLLO V9.0
+   APOLLO V9.3
    Data source: Supabase (real-time) with static JSON fallback.
    ══════════════════════════════════════════════════════════════ */
 

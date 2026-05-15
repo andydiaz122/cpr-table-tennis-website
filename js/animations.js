@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   Animations — APOLLO V9.0
+   Animations — APOLLO V9.3
    GSAP ScrollTrigger reveals, counter animations, parallax.
    Vanilla JS — no React. Respects prefers-reduced-motion.
    ══════════════════════════════════════════════════════════════ */

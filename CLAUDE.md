@@ -1,7 +1,17 @@
 # APOLLO Website V2 — Project Instructions
 
 ## Overview
-Investor-facing website for APOLLO V9.0, a quantitative sports betting system deploying $20K of external capital on Czech Liga Pro table tennis. This is a LIVE deployment with real capital — never use "shadow trading" or "virtual capital" language.
+Investor-facing website for APOLLO V9.3, a quantitative sports betting system deploying $20K of external capital on Czech Liga Pro table tennis. This is a LIVE deployment with real capital — never use "shadow trading" or "virtual capital" language.
+
+**Canonical V9.3 backtest stats** (source: `cpr-table-tennis-v9-retrain/` corrected baseline 2026-04-16, memory `feedback_v93_baseline_CORRECTED_2026_04_16.md`):
+- 4,204 OOS bets (36,908 test matches)
+- ROI: +2.71%
+- Sharpe (annualized): +1.87 — Sharpe CI₉₅: [−0.29, +4.00]
+- Max Drawdown: 3.30%
+- 2σ Sharpe hurdle: +1.92
+- Live shadow-trader Brier: model 0.2403 vs bookmaker 0.2423 (model marginally better calibrated)
+
+NOTE: a legacy Sharpe figure of +2.64 / hurdle +2.72 was measured against the abandoned `CPR_Table_Tennis_V9.0/` repo and formally discarded per global anti-pattern #31 (Multi-Repo Hallucinations). Do not use the legacy numbers.
 
 ## Tech Stack
 - **Frontend:** Vanilla HTML/CSS/JS (no build step, no React, no bundler)
@@ -162,8 +172,8 @@ Cash-out bets use `actual_winner = 'CASHOUT'` with `is_win = null`. P&L is the a
 Use `scripts/convert_hardrock_export.py` to parse the XML SpreadsheetML export. Handles "Last, First" → "First Last" name reorder and ET → UTC timestamp conversion. Cash-outs compute P&L as Payout - Wager. Outputs CSV for `import_bets.py`.
 
 ## Live URL
-- **Public:** https://andydiaz122.github.io/CPR_Table_Tennis_V9.0/website/
-- **Root redirect:** https://andydiaz122.github.io/CPR_Table_Tennis_V9.0/ (→ website/)
+- **Public:** https://andydiaz122.github.io/cpr-table-tennis-website/
+- **Repo:** https://github.com/andydiaz122/cpr-table-tennis-website
 - **Repo:** public (required for GitHub Pages free tier)
 
 ## Local Skills

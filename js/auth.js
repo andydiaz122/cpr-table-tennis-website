@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   Auth — APOLLO V9.0
+   Auth — APOLLO V9.3
    Supabase email/password auth for operator access.
    Investors view the site without authentication.
    ══════════════════════════════════════════════════════════════ */

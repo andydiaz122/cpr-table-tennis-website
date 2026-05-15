@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════════
-   Supabase Client — APOLLO V9.0
+   Supabase Client — APOLLO V9.3
    Initializes Supabase JS client for auth, queries, and realtime.
    Loaded via CDN: @supabase/supabase-js@2
    ══════════════════════════════════════════════════════════════ */

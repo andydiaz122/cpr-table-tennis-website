@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-APOLLO V9.0 — Hard Rock Sportsbook Export Converter
+APOLLO V9.3 — Hard Rock Sportsbook Export Converter
 =====================================================
 Parses Hard Rock's XML SpreadsheetML export (.xls) and converts
 to CSV format compatible with import_bets.py.
