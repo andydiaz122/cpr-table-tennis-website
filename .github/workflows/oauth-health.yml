@@ -1,0 +1,137 @@
+# OAuth Health Check
+#
+# Weekly probe + on-demand workflow that verifies CLAUDE_CODE_OAUTH_TOKEN is:
+#   1. Present (preflight catches MISSING — same as claude.yml jobs)
+#   2. Has the right shape (catches TRUNCATED / mis-pasted token)
+#
+# Closed-loop edge-case audit risk #3 (2026-05-09): preflight in claude.yml
+# only checks if-empty; this workflow additionally guards against truncated /
+# mis-pasted token shapes via length + format heuristics.
+#
+# IMPORTANT: We do NOT make a live Anthropic /v1/messages call here.
+# CLAUDE_CODE_OAUTH_TOKEN goes through an OIDC handshake inside
+# claude-code-action (see action source); a direct Authorization: Bearer call
+# to /v1/models will return 401 even when the token is valid for the action.
+# True liveness must be tested via an actual claude-code-action invocation,
+# which costs $$ — so we trust shape + presence as proxy and rely on the
+# "1 PR per week" cadence to surface real expirations within 7 days.
+#
+# Action: token rotates via `gh secret set CLAUDE_CODE_OAUTH_TOKEN <token> --repo <owner>/<repo>`.
+#         Do NOT use `claude /install-github-app` on a 3-lens-onboarded repo —
+#         its auto-PR conflicts with the existing 3-lens claude.yml (see
+#         anti-pattern #48 in ~/.claude/rules/anti-patterns.md).
+
+name: OAuth Health Check
+
+on:
+  schedule:
+    # Monday 12:00 UTC = Monday 08:00 EDT — weekly health probe
+    - cron: '0 12 * * 1'
+  workflow_dispatch:  # Allow manual trigger via GitHub UI
+
+permissions:
+  contents: read
+  issues: write  # To open an issue if probe fails
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate token presence + shape
+        env:
+          TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::CLAUDE_CODE_OAUTH_TOKEN is missing."
+            echo "MISSING" > /tmp/probe_status
+            exit 1
+          fi
+          # CLAUDE_CODE_OAUTH_TOKEN tokens are typically 64+ chars.
+          # < 30 chars suggests a truncated paste or wrong value.
+          if [ ${#TOKEN} -lt 30 ]; then
+            echo "::error::CLAUDE_CODE_OAUTH_TOKEN looks suspiciously short (${#TOKEN} chars; expected 30+). Possible truncation."
+            echo "SUSPICIOUS_SHAPE" > /tmp/probe_status
+            exit 1
+          fi
+          echo "::notice::OAuth token presence + shape OK (${#TOKEN} chars)."
+          echo "PRESENT_OK_SHAPE" > /tmp/probe_status
+
+      - name: Open issue on probe failure
+        if: failure()
+        uses: actions/github-script@v7
+        env:
+          PROBE_STATUS_FILE: /tmp/probe_status
+        with:
+          script: |
+            const fs = require('fs');
+            const statusFile = process.env.PROBE_STATUS_FILE;
+            const status = fs.existsSync(statusFile)
+              ? fs.readFileSync(statusFile, 'utf8').trim()
+              : 'UNKNOWN';
+
+            const title = `OAuth health probe failed: ${status}`;
+            const body = [
+              `The weekly OAuth health probe failed with status: \`${status}\`.`,
+              ``,
+              `**Action required**: Rotate the \`CLAUDE_CODE_OAUTH_TOKEN\` secret on this repository.`,
+              ``,
+              `**Recommended fix** (only one option — \`claude /install-github-app\` is intentionally NOT recommended; see [anti-pattern #48](https://github.com/${context.repo.owner}/System_Config/blob/main/CLAUDE.md) — it would re-fire the auto-PR conflict that breaks the 3-lens architecture on this repo):`,
+              `\`\`\``,
+              `gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo ${context.repo.owner}/${context.repo.repo}`,
+              `\`\`\``,
+              `(You'll be prompted to paste a fresh token. Generate via \`claude setup-token\` or your existing OAuth flow.)`,
+              ``,
+              `Until rotated, all 3 closed-loop review jobs (claude, claude-review, domain-expert) will silently fail with 401 errors when triggered.`,
+              ``,
+              `Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            ].join('\n');
+
+            // Defensive label creation: rest.issues.create throws (422) if any
+            // label in the array doesn't exist on the repo. Create labels first,
+            // tracking which ones are usable, then attach ONLY those to the
+            // issue. Without this, a transient non-422 createLabel error (e.g.,
+            // network blip, permission issue) would silently fall through and
+            // then issues.create would 422 because the label is missing — the
+            // alarm issue never gets opened. CodeRabbit finding from
+            // Personal_Website PR #39 review (2026-05-10).
+            const labels = ['oauth-failure', 'closed-loop-infra'];
+            const appliedLabels = [];
+            for (const label of labels) {
+              try {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label,
+                  color: label === 'oauth-failure' ? 'b60205' : '0e8a16',
+                });
+                console.log(`Created label: ${label}`);
+                appliedLabels.push(label);
+              } catch (err) {
+                // 422 = already exists → safe to use the label
+                if (err.status === 422) {
+                  console.log(`Label ${label} already exists (expected).`);
+                  appliedLabels.push(label);
+                } else {
+                  console.log(`Label create failed for ${label}: ${err.message} — skipping label, continuing with issue create`);
+                }
+              }
+            }
+
+            // Avoid duplicate issues
+            const existing = await github.rest.search.issuesAndPullRequests({
+              q: `repo:${context.repo.owner}/${context.repo.repo} is:issue is:open in:title "OAuth health probe failed"`
+            });
+
+            if (existing.data.total_count > 0) {
+              console.log(`Existing open OAuth-failure issue found (#${existing.data.items[0].number}). Skipping create.`);
+              return;
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body,
+              labels: appliedLabels,
+            });
+            console.log(`Opened issue: ${title} with labels: ${appliedLabels.join(', ') || '(none)'}`);

@@ -1,0 +1,328 @@
+# Claude Code GitHub Actions Workflow
+#
+# Two jobs (Lens 2 + Lens 3 of the 3-lens closed-loop review architecture):
+#   1. claude        — Lens 2 (Claude Bot): responds to @claude mentions
+#   2. domain-expert — Lens 3 (Domain Expert): auto-fires on PR open/synchronize
+#                       OR @domain-expert mentions, loads
+#                       <repo>/.claude/skills/domain-reviewer/SKILL.md
+#                       and runs project-specific invariant review.
+#
+# Security model:
+#   All auto-fire and mention-based triggers gated by author_association ∈
+#   {OWNER, MEMBER, COLLABORATOR} to prevent external contributors from burning
+#   API budget on public-repo PRs (closed-loop edge-case audit 2026-05-09).
+#
+# OAuth secret:
+#   Both jobs preflight-validate CLAUDE_CODE_OAUTH_TOKEN before invoking the action.
+#   Setup: `gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo <owner>/<repo>`.
+#   DO NOT use `claude /install-github-app` — its auto-PR conflicts with the
+#   3-lens onboarding PR and ships silently-broken defaults (anti-pattern #48).
+
+name: Claude Code
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    # `assigned` removed: the @claude trigger on issues should only fire on NEW
+    # content, not status changes. Re-assigning an existing issue would re-fire
+    # Claude on stale @claude mentions in the body. CodeRabbit finding from
+    # Personal_Website PR #39 review (2026-05-10).
+    types: [opened]
+  pull_request_review:
+    types: [submitted]
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  # =========================================================================
+  # Job 1: Claude Bot (Lens 2) — responds to @claude mentions
+  # Excludes @domain-expert / @claude-domain-expert to avoid double-firing
+  # with Job 2 on the same comment. Gated by author_association.
+  # =========================================================================
+  claude:
+    if: |
+      (
+        (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude') && !contains(github.event.comment.body, '@claude-domain-expert') && !contains(github.event.comment.body, '@domain-expert')) ||
+        (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude') && !contains(github.event.comment.body, '@claude-domain-expert') && !contains(github.event.comment.body, '@domain-expert')) ||
+        (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude') && !contains(github.event.review.body, '@claude-domain-expert') && !contains(github.event.review.body, '@domain-expert')) ||
+        (github.event_name == 'issues' && (contains(github.event.issue.body, '@claude') || contains(github.event.issue.title, '@claude')) && !contains(github.event.issue.body, '@claude-domain-expert') && !contains(github.event.issue.title, '@claude-domain-expert') && !contains(github.event.issue.body, '@domain-expert') && !contains(github.event.issue.title, '@domain-expert'))
+      ) &&
+      (
+        (github.event_name == 'issue_comment' && contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review_comment' && contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+        (github.event_name == 'pull_request_review' && contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association)) ||
+        (github.event_name == 'issues' && contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association))
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Validate CLAUDE_CODE_OAUTH_TOKEN secret is present
+        env:
+          TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::CLAUDE_CODE_OAUTH_TOKEN secret is not set on this repository."
+            echo "::error::Setup: 'gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo <owner>/<repo>' (DO NOT use 'claude /install-github-app' — auto-PR conflict per anti-pattern #48)."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
+  # =========================================================================
+  # Job 1b: Claude Code Review (Lens 2 — AUTO-FIRE) — webhook-primary trigger
+  # Fires automatically on pull_request.opened/synchronize. Persona: general
+  # deep-reasoning code reviewer (edge cases, race conditions, error handling,
+  # performance, architecture, security patterns). Explicitly NOT project-
+  # specific invariants (Domain Expert's lane) and NOT style/format/lint
+  # (CodeRabbit's lane). Findings overlap with other lenses are HIGHER signal
+  # (3-way confirmation), not redundancy.
+  #
+  # Cost guards:
+  # - PR title contains [skip-review] (handled at trigger level)
+  # - draft PRs (handled at trigger level)
+  # - PR author NOT in {OWNER,MEMBER,COLLABORATOR} — closes external-PR cost
+  #   drain (closed-loop edge case audit 2026-05-09 risk #1).
+  # - diff < 30 lines OR > 5000 lines OR > 100 changed files (handled inside
+  #   prompt: pre-check pulls PR metadata via gh, exits cleanly with skip note)
+  # =========================================================================
+  claude-review:
+    if: |
+      github.event_name == 'pull_request' &&
+      (github.event.action == 'opened' || github.event.action == 'synchronize') &&
+      github.event.pull_request.draft == false &&
+      !contains(github.event.pull_request.title, '[skip-review]') &&
+      contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association)
+    # Cancel any in-progress claude-review for the SAME PR if a new commit lands.
+    # Prevents synchronize churn (5 force-pushes in 30 min = 5 sequential reviews
+    # = $5-10 wasted). Closes risk #4 from edge-case audit (2026-05-09).
+    # Group is per-PR so different PRs don't cancel each other.
+    concurrency:
+      group: claude-review-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Validate CLAUDE_CODE_OAUTH_TOKEN secret is present
+        env:
+          TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::CLAUDE_CODE_OAUTH_TOKEN secret is not set on this repository."
+            echo "::error::Setup: 'gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo <owner>/<repo>' (DO NOT use 'claude /install-github-app' — auto-PR conflict per anti-pattern #48)."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          track_progress: true
+          # Allow harness-pushed PRs (commit-push-pr lands commits as claude[bot]
+          # via the GitHub App) to receive Lens 2 review. Empty default (cost
+          # protection) blocks ALL bot-triggered runs, but the harness IS our
+          # primary code-push path — bot-authored PRs otherwise run at 0-of-3
+          # validation. Scope kept to claude[bot] only (NOT '*') to avoid
+          # accidentally reviewing dependabot / github-actions[bot] / other bots.
+          # Caught 2026-05-12 on System_Config PR #10 — see anti-pattern #50.
+          allowed_bots: 'claude[bot]'
+          # Explicit allowedTools required for the pre-check `gh pr view --json`
+          # call. claude-code-action@v1 has a default Bash allowlist but
+          # arbitrary `gh pr view` with `--json` arguments may not be on it.
+          # Catches CodeRabbit finding on PR #35 (2026-05-09).
+          claude_args: |
+            --allowedTools "Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr comment:*),Bash(gh search:*)"
+          prompt: |
+            PR_NUMBER=${{ github.event.pull_request.number }}
+
+            You are the Claude Code Review bot for this repository's 3-lens
+            closed-loop review architecture (Lens 2). Your specialization:
+            DEEP GENERAL-PURPOSE CODE REVIEW — the kind that requires sustained
+            reasoning rather than pattern matching.
+
+            Where to spend reasoning depth (your unique strengths):
+            - Edge cases the author may not have considered (boundary values,
+              empty inputs, off-by-one, integer overflow, null/undefined paths)
+            - Race conditions, concurrency hazards, ordering dependencies,
+              re-entrancy, async lifetime issues
+            - Error handling completeness — silently swallowed exceptions,
+              missing fallbacks, retries that mask real failures
+            - Performance — algorithmic complexity, hot-path allocations,
+              N+1 queries, unnecessary blocking calls
+            - Architectural smells — coupling, abstraction leakage, hidden
+              state, layering violations, dependency cycles
+            - Security patterns at the logic level (NOT pattern-matched
+              vulnerabilities; CodeRabbit's gitleaks/semgrep/osv handle those)
+
+            EXPLICITLY NOT YOUR LANE:
+            - Style, formatting, naming conventions (CodeRabbit / Lens 1)
+            - Pattern-matched lint rules (CodeRabbit / Lens 1)
+            - Project-specific Critical Invariants from CLAUDE.md or
+              .claude/skills/domain-reviewer/SKILL.md (Domain Expert / Lens 3)
+
+            Workflow:
+            0. PRE-CHECK (cost guard): Run
+               `gh pr view $PR_NUMBER --json changedFiles,additions,deletions`
+               and inspect:
+                 - If changedFiles > 100 OR (additions + deletions) > 5000:
+                   Post one comment "🔍 Claude Code Review (Skipped) — diff
+                   too large (X files / Y lines). Run targeted review on a
+                   subset via `@claude /code-review path/to/file`" and exit.
+                 - If (additions + deletions) < 30:
+                   Post one comment "🔍 Claude Code Review (Skipped) — diff
+                   too small to warrant deep review (< 30 lines)" and exit.
+            1. Get the PR diff via `gh pr diff $PR_NUMBER` and inspect changed files.
+            2. Skim the project's CLAUDE.md for context, but DO NOT replicate
+               Domain Expert's invariant analysis. Your value is generalist
+               reasoning that the project-specific persona would miss.
+            3. Identify findings in priority order: CRITICAL → HIGH →
+               MEDIUM → LOW. Be concrete: `file:line — concern + reasoning +
+               suggested fix`. No filler.
+
+            Output format:
+            - Comment prefix: "🔍 Claude Code Review"
+            - Verdict: PASS | CONCERNS | BLOCKING
+            - Findings list with file:line citations
+            - If you converge on a finding that another lens (CodeRabbit or
+              Domain Expert) is likely to also flag, NOTE the convergence —
+              don't suppress your finding. Three-way confirmation = high signal.
+
+            Be terse. Real findings only. No haiku, no padding.
+
+  # =========================================================================
+  # Job 2: Domain Expert (Lens 3) — webhook-primary trigger
+  # Fires automatically on pull_request.opened/synchronize OR @domain-expert
+  # mention (gated by author_association on mention-only branches).
+  # The issue_comment branch is restricted to PR comments via
+  # `github.event.issue.pull_request != null` so this job never runs on plain
+  # issues — that removes the need for `issues: write` permission.
+  # Loads <repo>/.claude/skills/domain-reviewer/SKILL.md as the persona.
+  # Adaptive Haiku/Opus routing handled inside the skill body.
+  #
+  # ALIAS HANDLING: contains(body, '@domain-expert') matches both '@domain-expert'
+  # AND '@claude-domain-expert' (substring match), so a single check covers both.
+  # We also explicitly check '@claude-domain-expert' for readability and to make
+  # the intent unambiguous.
+  # =========================================================================
+  domain-expert:
+    if: |
+      (github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize') && github.event.pull_request.draft == false && !contains(github.event.pull_request.title, '[skip-review]') && contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association)) ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request != null && (contains(github.event.comment.body, '@domain-expert') || contains(github.event.comment.body, '@claude-domain-expert')) && contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+      (github.event_name == 'pull_request_review_comment' && (contains(github.event.comment.body, '@domain-expert') || contains(github.event.comment.body, '@claude-domain-expert')) && contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)) ||
+      (github.event_name == 'pull_request_review' && (contains(github.event.review.body, '@domain-expert') || contains(github.event.review.body, '@claude-domain-expert')) && contains(fromJson('["OWNER","MEMBER","COLLABORATOR"]'), github.event.review.author_association))
+    # Cancel any in-progress domain-expert run for the SAME PR if a new commit
+    # OR new mention lands. Stale-on-old-SHA reviews aren't useful; latest commit
+    # gets the review. Closes risk #4 from edge-case audit (2026-05-09).
+    # Group by PR number; uses issue.number for mention triggers (PR comments
+    # come through the issue_comment event but issue.number == pull_request.number
+    # for PR comments).
+    concurrency:
+      group: domain-expert-pr-${{ github.event.pull_request.number || github.event.issue.number }}
+      cancel-in-progress: true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Validate CLAUDE_CODE_OAUTH_TOKEN secret is present
+        env:
+          TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -z "$TOKEN" ]; then
+            echo "::error::CLAUDE_CODE_OAUTH_TOKEN secret is not set on this repository."
+            echo "::error::Setup: 'gh secret set CLAUDE_CODE_OAUTH_TOKEN --repo <owner>/<repo>' (DO NOT use 'claude /install-github-app' — auto-PR conflict per anti-pattern #48)."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Domain Expert review
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          track_progress: true
+          # Same allowed_bots rationale as claude-review job above — bot-pushed
+          # PRs need Lens 3 review too. See anti-pattern #50 (2026-05-12).
+          allowed_bots: 'claude[bot]'
+          # Explicit allowedTools for pre-check + diff fetch + comment posting.
+          # See claude-review job for rationale.
+          claude_args: |
+            --allowedTools "Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr comment:*),Bash(gh search:*)"
+          prompt: |
+            PR_NUMBER=${{ github.event.pull_request.number || github.event.issue.number }}
+
+
+            You are the Domain Expert third bot for the closed-loop review trio (Lens 3).
+
+            Your specialization: project-specific Critical Invariants, multi-version
+            consistency, capital-risk-bearing code paths, and production state-file
+            integrity — drawn from this repo's CLAUDE.md and .claude/skills/domain-reviewer/SKILL.md.
+
+            Other lenses (CodeRabbit, Claude bot via @claude /code-review) operate in
+            parallel with their own broad-coverage strengths. Do NOT artificially
+            suppress your finding because another lens MIGHT catch it — overlap is
+            HIGHER signal (three independent confirmations of a critical issue beats
+            one). Your value is the project-specific frame, NOT non-overlap.
+
+            Where to spend reasoning depth (your unique strengths):
+            - Critical Invariants list compliance from project CLAUDE.md
+            - Project-specific architectural constraints from
+              .claude/skills/domain-reviewer/SKILL.md
+            - Capital / data-integrity / accessibility / brand impact analysis
+              (bounded vs unbounded; specific to the project domain)
+            - Production state files / model artifacts / configuration drift
+            - Multi-repo confusion guards (anti-pattern #31) when the project
+              has sibling repos with similar names
+
+            Workflow:
+            0. PRE-CHECK (cost guard): Run
+               `gh pr view $PR_NUMBER --json changedFiles,additions,deletions`.
+               If changedFiles > 100 OR (additions + deletions) > 5000:
+               Post one comment "🎯 Domain Expert Review (Skipped) — diff too
+               large (X files / Y lines). For trading repos, capital risk
+               warrants targeted analysis instead. Trigger via
+               `@domain-expert /deep <subset>` to scope." and exit.
+            1. Read .claude/skills/domain-reviewer/SKILL.md from this repo. If the file does not exist, post one comment "Domain Expert skill not yet authored for this repo. Skipping." and exit.
+            2. Use that skill file as your persona. Follow its 5-section structure (Project Domain Summary, Critical Invariants to Check, Domain-Specific Pitfalls, False-Positive Suppression, Output Format).
+            3. Get the PR diff via `gh pr diff $PR_NUMBER` (PR_NUMBER is set as a literal in the prompt header line above — GitHub Actions expands the expression before sending the prompt to Claude).
+            4. Skip if diff is < 30 lines AND no @domain-expert explicit mention. Post compact "Triage clean — diff too small to warrant Domain Expert review."
+
+            Adaptive routing (per skill Section 5 / project-domain-reviewer-skeleton skeleton):
+            - Phase 1 Triage: classify diff (diff_class, invariant_areas_touched, complexity, needs_deep_dive).
+            - If needs_deep_dive=true OR repo is a TRADING repo (check skill's Section 1 — if it says "trading", default to Phase 2 ALWAYS) OR @domain-expert /deep is mentioned: also run Phase 2 Deep-Dive with full reasoning depth.
+            - Otherwise: post Triage only.
+
+            Output format (post as PR comment):
+            - Comment prefix: "🎯 Domain Expert Review (Triage)" or "🎯 Domain Expert Review (Deep-Dive)"
+            - Use the JSON header + Findings format specified in the project's domain-reviewer skill Section 5.
+            - For trading repos with capital_risk: unbounded findings, flag explicitly.
+
+            Be terse. Real findings only. Overlap with other lenses is acceptable
+            when it strengthens the signal (cite the convergence: "CodeRabbit also
+            flagged this — high confidence"). Don't fabricate, don't pad.

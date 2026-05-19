@@ -1,0 +1,166 @@
+# .coderabbit.yaml — GENERIC project (closed-loop integration)
+#
+# 3-lens architecture (Jarred-pattern):
+#   Lens 1 (CodeRabbit, you):                style + CLAUDE.md adherence + workflow YAML
+#   Lens 2 (Claude bot via @claude /code-review): deep code-quality + edge cases + architecture
+#   Lens 3 (Domain Expert via @domain-expert):    project Critical Invariants
+#
+# IMPORTANT structural notes:
+#   - tone_instructions MUST be top-level (additionalProperties: false on reviews
+#     block silently rejects nested keys, dropping the entire persona)
+#   - tone_instructions has 250-char maxLength
+#   - Lane charter belongs in path_instructions (no length limit)
+
+language: en-US
+
+reviews:
+  profile: assertive
+  request_changes_workflow: false
+
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: true
+  changed_files_summary: true
+  sequence_diagrams: true
+  estimate_code_review_effort: true
+  assess_linked_issues: true
+  related_issues: true
+  related_prs: true
+  suggested_labels: true
+  suggested_reviewers: true
+
+  enable_prompt_for_ai_agents: true
+
+  auto_review:
+    enabled: true
+    drafts: false
+    auto_incremental_review: true
+    base_branches:
+      - main
+      - master
+
+  pre_merge_checks:
+    docstrings:
+      mode: warning
+      threshold: 50
+    title:
+      mode: warning
+      requirements: |
+        Use conventional commits prefix: feat:, fix:, refactor:, docs:, test:,
+        chore:, perf:, ci:. PR title should be specific and ≤70 chars.
+    description:
+      mode: warning
+    issue_assessment:
+      mode: warning
+
+  finishing_touches:
+    docstrings:
+      enabled: true
+    unit_tests:
+      enabled: true
+    simplify:
+      enabled: true
+
+  path_filters:
+    - "!**/*.lock"
+    - "!**/*.log"
+    - "!.venv/**"
+    - "!__pycache__/**"
+    - "!coverage/**"
+    - "!node_modules/**"
+    - "!dist/**"
+    - "!build/**"
+
+  path_instructions:
+    - path: "**/CLAUDE.md"
+      instructions: |
+        Project executable contract. Check Jarred 22-point anatomy adherence;
+        Critical Invariants list integrity (must NOT shrink, become ambiguous,
+        or lose an invariant without explicit changelog); debug env vars
+        documented (anti-pattern #37).
+
+    - path: ".github/workflows/*.yml"
+      instructions: |
+        Workflow YAML correctness IS your specialty. Verify: LF line endings,
+        permission scopes (least privilege), secret-presence preflight steps using
+        env-then-shell-test pattern (NOT `if: secrets context` — that is forbidden),
+        author_association gates on bot triggers (OWNER/MEMBER/COLLABORATOR),
+        consistent exclusion patterns across all event branches, action input
+        compatibility with the version pinned (e.g., claude_env was removed in
+        claude-code-action@v1). Cross-validate against actionlint rules.
+
+    - path: ".coderabbit.yaml"
+      instructions: |
+        Self-config schema. Critical: tone_instructions is a TOP-LEVEL key
+        (alongside reviews, chat, knowledge_base) NOT nested under reviews —
+        additionalProperties: false silently drops nested keys. tone_instructions
+        has 250-char maxLength. profile: assertive enables Nitpick severity.
+        ast-grep block requires essential_rules/rule_dirs/util_dirs/packages
+        (NOT enabled: true).
+
+    - path: "tests/**"
+      instructions: |
+        Test patterns: error-first output before assertions (anti-pattern #36).
+        Wrap setup in try/except and emit underlying error to stderr BEFORE
+        re-raising so the real cause lands BEFORE assertion formatting.
+
+  tools:
+    actionlint:
+      enabled: true
+    yamllint:
+      enabled: true
+    markdownlint:
+      enabled: true
+    languagetool:
+      enabled: true
+    shellcheck:
+      enabled: true
+    ast-grep:
+      essential_rules: true
+    gitleaks:
+      enabled: true
+    trufflehog:
+      enabled: true
+    semgrep:
+      enabled: true
+    osvScanner:
+      enabled: true
+    github-checks:
+      enabled: true
+      timeout_ms: 90000
+
+chat:
+  art: false
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
+  web_search:
+    enabled: true
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - "CLAUDE.md"
+      - "**/CLAUDE.md"
+      - "FORANDREW.md"
+      - "**/FORANDREW.md"
+      - "TOOLS_IMPACT.md"
+      - "**/TOOLS_IMPACT.md"
+      - ".claude/skills/**/SKILL.md"
+      - ".cursorrules"
+  learnings:
+    scope: global
+  issues:
+    scope: global
+  pull_requests:
+    scope: global
+
+issue_enrichment:
+  auto_enrich:
+    enabled: true
+  planning:
+    enabled: true
+
+# tone_instructions: TOP-LEVEL key, ≤250 chars.
+tone_instructions: "Lens 1 of 3-bot closed loop. Style + CLAUDE.md + workflow YAML focus. Other lenses cover deep reasoning + project invariants. Overlap = higher signal. Terse. One bullet per finding. No haiku."
