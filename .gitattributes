@@ -1,0 +1,38 @@
+# Force LF line endings on all text files. Workflow YAMLs require LF on
+# Linux runners; mixed CRLF/LF was caught by CodeRabbit on PR #4.
+* text=auto eol=lf
+
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.md    text eol=lf
+*.json  text eol=lf
+*.py    text eol=lf
+*.ts    text eol=lf
+*.tsx   text eol=lf
+*.js    text eol=lf
+*.jsx   text eol=lf
+*.css   text eol=lf
+*.html  text eol=lf
+*.sh    text eol=lf
+*.toml  text eol=lf
+*.cfg   text eol=lf
+*.ini   text eol=lf
+
+# Binary files — never normalize
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.mp4   binary
+*.webm  binary
+*.glb   binary
+*.fbx   binary
+*.cbm   binary
+*.joblib binary
+*.db    binary
+*.db-shm binary
+*.db-wal binary
+*.parquet binary
+*.zip   binary
+*.tar.gz binary
