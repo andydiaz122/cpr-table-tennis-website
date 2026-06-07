@@ -16,6 +16,14 @@
   // Base bankroll for reconstruction
   var BASE_BANKROLL = 20000;
 
+  // Public read columns only — excludes alpha-bearing fields (model_prob,
+  // kelly_scaled, stake_fraction, brier_scale_factor, bookmaker_implied,
+  // model_version, notes) so the public anon key never broadcasts them to the
+  // client. NOTE: fully closing this also needs a Supabase column grant / view.
+  var PUBLIC_BET_COLUMNS =
+    'id,match_date,p1_name,p2_name,pick_name,bet_side,odds_at_bet,' +
+    'edge,stake_amount,profit_loss,is_win,actual_winner,bookmaker';
+
   // ── Client Initialization ─────────────────────────────────
   var _createClient = window.supabase ? window.supabase.createClient : null;
   var client = null;
@@ -44,7 +52,7 @@
     if (!client) return Promise.resolve({ data: [], error: null });
     return client
       .from('bets')
-      .select('*')
+      .select(PUBLIC_BET_COLUMNS)
       .order('match_date', { ascending: true });
   }
 
@@ -56,7 +64,7 @@
     if (!client) return Promise.resolve({ data: [], error: null });
     return client
       .from('bets')
-      .select('*')
+      .select(PUBLIC_BET_COLUMNS)
       .is('is_win', null)
       .is('actual_winner', null)
       .order('created_at', { ascending: false });

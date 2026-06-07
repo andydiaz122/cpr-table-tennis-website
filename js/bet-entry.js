@@ -9,8 +9,9 @@
 
   var form = null;
   var _initialized = false;
-  var DEFAULT_KELLY_FRACTION = 0.25; // V8.3 Quarter-Kelly
-  var MAX_STAKE = 3000; // Safety rail: 15% of $20K
+  // Kelly fraction and the max-stake safety rail are operator-entered at runtime
+  // (form inputs) — never hardcoded, so no proprietary sizing values ship in
+  // publicly-accessible client source.
 
   function init() {
     if (_initialized) return;
@@ -19,7 +20,7 @@
     _initialized = true;
 
     // Auto-calculate on input change
-    var calcFields = ['odds', 'model-prob', 'brier-scale'];
+    var calcFields = ['odds', 'model-prob', 'brier-scale', 'kelly-fraction', 'max-stake'];
     calcFields.forEach(function (fieldName) {
       var input = form.querySelector('[name="' + fieldName + '"]');
       if (input) {
@@ -75,6 +76,7 @@
     var odds = parseFloat(form.querySelector('[name="odds"]').value) || 0;
     var modelProb = parseFloat(form.querySelector('[name="model-prob"]').value) || 0;
     var brierScale = parseFloat(form.querySelector('[name="brier-scale"]').value) || 1.0;
+    var kellyFraction = parseFloat(form.querySelector('[name="kelly-fraction"]').value) || 0;
 
     // Edge = (model_prob * odds) - 1
     var edge = odds > 1 && modelProb > 0 ? (modelProb * odds) - 1 : 0;
@@ -84,15 +86,16 @@
     // Kelly raw = edge / (odds - 1)
     var kellyRaw = odds > 1 && edge > 0 ? edge / (odds - 1) : 0;
 
-    // Kelly scaled = kelly_raw * KELLY_FRACTION * brier_scale
-    var kellyScaled = kellyRaw * DEFAULT_KELLY_FRACTION * brierScale;
+    // Kelly scaled = kelly_raw * kelly_fraction * brier_scale (fraction operator-entered)
+    var kellyScaled = kellyRaw * kellyFraction * brierScale;
     var kellyEl = form.querySelector('[name="kelly-scaled"]');
     if (kellyEl) kellyEl.value = kellyScaled.toFixed(4);
 
     // Stake = kelly_scaled * current_bankroll
     if (window.apolloDb && window.apolloDb.isConfigured()) {
+      var maxStake = parseFloat(form.querySelector('[name="max-stake"]').value) || Infinity;
       window.apolloDb.getBankroll().then(function (bankroll) {
-        var stake = Math.min(kellyScaled * bankroll, MAX_STAKE);
+        var stake = Math.min(kellyScaled * bankroll, maxStake);
         var stakeEl = form.querySelector('[name="stake"]');
         if (stakeEl && !stakeEl.dataset.manual) {
           stakeEl.value = stake > 0 ? stake.toFixed(2) : '0.00';
@@ -147,7 +150,8 @@
     if (!odds || odds <= 1) errors.push('Odds must be > 1.0');
     if (!modelProb || modelProb <= 0 || modelProb >= 1) errors.push('Model prob must be between 0 and 1');
     if (!stake || stake <= 0) errors.push('Stake must be > 0');
-    if (stake > MAX_STAKE) errors.push('Stake exceeds $' + MAX_STAKE + ' safety limit');
+    var maxStake = parseFloat(form.querySelector('[name="max-stake"]').value) || Infinity;
+    if (stake > maxStake) errors.push('Stake exceeds the operator max-stake limit');
 
     if (errors.length > 0) {
       showFormMessage(errors.join('. '), 'error');
