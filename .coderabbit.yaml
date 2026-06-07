@@ -1,3 +1,4 @@
+inheritance: true  # opt into central andydiaz122/coderabbit config (anti-pattern #53)
 # .coderabbit.yaml — GENERIC project (closed-loop integration)
 #
 # 3-lens architecture (Jarred-pattern):
